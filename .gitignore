@@ -1,0 +1,26 @@
+# 検証用証明書・秘密鍵・中間生成物を除外（Gitリポジトリへの誤コミット防止）
+certs/
+*.key
+*.pem
+*.crt
+*.csr
+*.der
+*.srl
+*.p12
+*.pfx
+*.jks
+*.ext
+*.cnf
+
+# 環境変数ファイル
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# プロジェクト内ナレッジ（公開防止）
+.agents/knowledge/

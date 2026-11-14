@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTPS Certificate Tutorial - Test Page</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 720px;
+      margin: 4rem auto;
+      padding: 0 1.5rem;
+      line-height: 1.6;
+      color: #1f2937;
+    }
+    .card {
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 1.5rem 2rem;
+      background: #f9fafb;
+    }
+    h1 {
+      margin-top: 0;
+      color: #065f46;
+      font-size: 1.5rem;
+    }
+    code {
+      background: #e5e7eb;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>HTTPS Self-Signed / Private CA Test Success!</h1>
+    <p>このページが表示されていれば、ローカルHTTPSサーバーとのTLSハンドシェイクおよび通信が成立しています。</p>
+    <ul>
+      <li>ブラウザのアドレスバーにある鍵アイコン（またはサイト情報アイコン）から、現在使われている<strong>証明書（Subject / Issuer / SAN）</strong>を確認できます。</li>
+      <li>Step 3（自己署名証明書）では警告画面を通過して表示され、Step 5（信頼ストア登録後）や Step 6（<code>mkcert</code>）では警告なしで表示されます。</li>
+    </ul>
+  </div>
+</body>
+</html>

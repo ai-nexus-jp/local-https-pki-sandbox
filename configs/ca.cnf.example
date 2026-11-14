@@ -1,0 +1,26 @@
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_ca
+prompt = no
+
+[req_distinguished_name]
+C = JP
+ST = Tokyo
+L = Example-ku
+O = AI Nexus (DEV)
+OU = Local Development PKI
+CN = AI Nexus DEV Root CA
+
+[v3_ca]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:TRUE
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+# このDEV用ルートCAが署名・信頼できる対象をローカル/予約ドメインとループバックIPのみに限定する
+nameConstraints = critical, @name_constraints
+
+[name_constraints]
+permitted;DNS.0 = test
+permitted;DNS.1 = localhost
+permitted;IP.0 = 127.0.0.1/255.255.255.255
+permitted;IP.1 = ::1/ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff

@@ -1,0 +1,61 @@
+services:
+  https-server:
+    image: python:3.10-slim
+    working_dir: /app
+    command:
+      - python3
+      - https_server.py
+      - --host
+      - 0.0.0.0
+      - --port
+      - "8443"
+      - --cert
+      - certs/server.crt
+      - --key
+      - certs/private.key
+    ports:
+      - "127.0.0.1:8443:8443"
+    volumes:
+      - ./https_server.py:/app/https_server.py:ro
+      - ./index.html:/app/index.html:ro
+      # サーバーコンテナには「サーバー証明書」と「サーバー秘密鍵」だけを渡す（ca.key は渡さない）
+      - ./certs/server.crt:/app/certs/server.crt:ro
+      - ./certs/private.key:/app/certs/private.key:ro
+    networks:
+      tls-sandbox:
+        aliases:
+          - dev.ai-nexus.test
+          - wrong-host.example.com
+
+  client:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    depends_on:
+      - https-server
+    volumes:
+      # クライアント側には公開情報である「ルートCA証明書 (ca.crt)」だけを渡す
+      - ./certs/ca.crt:/certs/ca.crt:ro
+    networks:
+      - tls-sandbox
+
+  browser:
+    image: jlesage/firefox:latest
+    depends_on:
+      - https-server
+    ports:
+      # ホストPCの localhost のみに公開（外部からnoVNCへ接続できないようにする）
+      - "127.0.0.1:5800:5800"
+    environment:
+      - KEEP_APP_RUNNING=1
+      - FF_OPEN_URL=https://dev.ai-nexus.test:8443
+      - TZ=Asia/Tokyo
+    volumes:
+      # ブラウザコンテナにも「ルートCA証明書 (ca.crt)」だけを渡す（/config は永続化せず破棄可能にする）
+      - ./certs/ca.crt:/certs/ca.crt:ro
+    networks:
+      - tls-sandbox
+
+networks:
+  tls-sandbox:
+    driver: bridge
